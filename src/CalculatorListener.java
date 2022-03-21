@@ -72,7 +72,7 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
                         else
                             p.setText(p.getText().substring(0, p.getText().length()-1));
                     } catch(StringIndexOutOfBoundsException ex) {
-                        ErrorDialog err = new ErrorDialog(f, "Error", "Cannot invert sign without typing a"
+                        new ErrorDialog(f, "Error", "Cannot invert sign without typing a"
                             + "\nnumber first.");
                     }
                 }
@@ -102,7 +102,7 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
                     try {
                         p.setText(String.valueOf(calculate()));
                     } catch(InvalidOperationException ex) {
-                        ErrorDialog err = new ErrorDialog(f, "Error", ex.getMessage());
+                        new ErrorDialog(f, "Error", ex.getMessage());
                     }
                 }
                 case "CE" -> p.setText("");
