@@ -23,33 +23,33 @@ public class CalculatorWindow extends JFrame {
         super("Calculator");
         setSize(450, 500);
 
-        JPanel pDisplay = new JPanel();
-        pDisplay.setLayout(new GridLayout());
-        add(pDisplay, "North");
+        JPanel displayPanel = new JPanel();
+        displayPanel.setLayout(new GridLayout());
+        add(displayPanel, "North");
 
-        JTextField display = new JTextField("", SwingConstants.RIGHT);
-        display.setFont(new Font("sans-serif", Font.PLAIN, 20));
-        display.setBorder(new EmptyBorder(10, 10, 10, 10));
-        display.setBackground(new Color(238, 238, 238));
-        display.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-        pDisplay.add(display);
+        JTextField displayField = new JTextField("", SwingConstants.RIGHT);
+        displayField.setFont(new Font("sans-serif", Font.PLAIN, 20));
+        displayField.setBorder(new EmptyBorder(10, 10, 10, 10));
+        displayField.setBackground(new Color(238, 238, 238));
+        displayField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        displayPanel.add(displayField);
 
-        JPanel pNumeri = new JPanel();
-        pNumeri.setLayout(new GridLayout(5, 4));
-        add(pNumeri, "Center");
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(5, 4));
+        add(buttonPanel, "Center");
 
         String[] numeri = {"rand", "sqrt", "x^y", "CE", "=", "sin", "9", "8", "7", "X", "cos", "6", "5", "4", ":", "tan", "3",
                 "2", "1", "-", "log10", "+/-", "0", ".", "+"};
         for (String s : numeri) {
             JButton b = new JButton(s);
             if (isInt(s))
-                b.addMouseListener(new CalculatorListener(this, display, true));
+                b.addMouseListener(new CalculatorListener(this, displayField, true));
             else
-                b.addMouseListener(new CalculatorListener(this, display, false));
-            pNumeri.add(b);
+                b.addMouseListener(new CalculatorListener(this, displayField, false));
+            buttonPanel.add(b);
         }
 
-        display.addKeyListener(new CalculatorListener(this, display, false));
+        displayField.addKeyListener(new CalculatorListener(this, displayField, false));
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }

@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 public class CalculatorListener extends MouseAdapter implements KeyListener {
 
     private final JFrame f;
-    private final JTextField p;
+    private final JTextField tf;
     private final boolean isNumber;
     private static int op = -1;
     private static double n;
@@ -22,12 +22,12 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
     /**
      * Constructor.
      * @param f JFrame associated with the listener (the CalculatorWindow)
-     * @param p JTextField used as the calculator's display
+     * @param tf JTextField used as the calculator's display
      * @param isNumber true if the button contains a number, false otherwise
      */
-    public CalculatorListener(JFrame f, JTextField p, boolean isNumber) {
+    public CalculatorListener(JFrame f, JTextField tf, boolean isNumber) {
         this.f = f;
-        this.p = p;
+        this.tf = tf;
         this.isNumber = isNumber;
     }
 
@@ -38,40 +38,40 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
         try {
             JButton b = (JButton) e.getSource();
             if(isNumber)
-                p.setText(p.getText() + b.getText());
+                tf.setText(tf.getText() + b.getText());
             else {
                 switch (b.getText()) {
                     case "+" -> {
                         op = 0;
-                        n = Double.parseDouble(p.getText());
-                        p.setText("");
+                        n = Double.parseDouble(tf.getText());
+                        tf.setText("");
                     }
                     case "-" -> {
                         op = 1;
-                        n = Double.parseDouble(p.getText());
-                        p.setText("");
+                        n = Double.parseDouble(tf.getText());
+                        tf.setText("");
                     }
                     case "X" -> {
                         op = 2;
-                        n = Double.parseDouble(p.getText());
-                        p.setText("");
+                        n = Double.parseDouble(tf.getText());
+                        tf.setText("");
                     }
                     case ":" -> {
                         op = 3;
-                        n = Double.parseDouble(p.getText());
-                        p.setText("");
+                        n = Double.parseDouble(tf.getText());
+                        tf.setText("");
                     }
                     case "x^y" -> {
                         op = 4;
-                        n = Double.parseDouble(p.getText());
-                        p.setText("");
+                        n = Double.parseDouble(tf.getText());
+                        tf.setText("");
                     }
                     case "+/-" -> {
                         try {
-                            if(p.getText().charAt(p.getText().length()-1) != '-')
-                                p.setText(p.getText() + "-");
+                            if(tf.getText().charAt(tf.getText().length()-1) != '-')
+                                tf.setText(tf.getText() + "-");
                             else
-                                p.setText(p.getText().substring(0, p.getText().length()-1));
+                                tf.setText(tf.getText().substring(0, tf.getText().length()-1));
                         } catch(StringIndexOutOfBoundsException ex) {
                             new ErrorDialog(f, "Error", "Cannot invert sign without typing a"
                                     + "\nnumber first.");
@@ -79,34 +79,34 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
                     }
                     case "rand" -> {
                         Random r = new Random();
-                        p.setText(String.valueOf(r.nextDouble(1)));
+                        tf.setText(String.valueOf(r.nextDouble(1)));
                     }
-                    case "sin" -> p.setText(String.valueOf(Math.sin(Double.parseDouble(p.getText()))));
-                    case "cos" -> p.setText(String.valueOf(Math.cos(Double.parseDouble(p.getText()))));
-                    case "tan" -> p.setText(String.valueOf(Math.tan(Double.parseDouble(p.getText()))));
+                    case "sin" -> tf.setText(String.valueOf(Math.sin(Double.parseDouble(tf.getText()))));
+                    case "cos" -> tf.setText(String.valueOf(Math.cos(Double.parseDouble(tf.getText()))));
+                    case "tan" -> tf.setText(String.valueOf(Math.tan(Double.parseDouble(tf.getText()))));
                     case "log10" -> {
-                        if(p.getText().charAt(0) == '-')
+                        if(tf.getText().charAt(0) == '-')
                             new ErrorDialog(f, "Error", "Cannot calculate the logarithm of a"
                                     + "\nnegative number.");
                         else
-                            p.setText(String.valueOf(Math.log10(Double.parseDouble(p.getText()))));
+                            tf.setText(String.valueOf(Math.log10(Double.parseDouble(tf.getText()))));
                     }
-                    case "." -> p.setText(p.getText() + ".");
+                    case "." -> tf.setText(tf.getText() + ".");
                     case "sqrt" -> {
-                        if(p.getText().charAt(p.getText().length()-1) == '-')
+                        if(tf.getText().charAt(tf.getText().length()-1) == '-')
                             new ErrorDialog(f, "Error", "Cannot calculate the square root of a"
                                     + "\nnegative number.");
                         else
-                            p.setText(String.valueOf(Math.sqrt(Double.parseDouble(p.getText()))));
+                            tf.setText(String.valueOf(Math.sqrt(Double.parseDouble(tf.getText()))));
                     }
                     case "=" -> {
                         try {
-                            p.setText(String.valueOf(calculate()));
+                            tf.setText(String.valueOf(calculate()));
                         } catch(InvalidOperationException ex) {
                             new ErrorDialog(f, "Error", ex.getMessage());
                         }
                     }
-                    case "CE" -> p.setText("");
+                    case "CE" -> tf.setText("");
                 }
             }
         } catch(NumberFormatException ignored) {
@@ -128,27 +128,27 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
             switch(c) {
                 case '+' -> {
                     op = 0;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
+                    n = Double.parseDouble(tf.getText());
+                    tf.setText("");
                 }
                 case '-' -> {
                     op = 1;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
+                    n = Double.parseDouble(tf.getText());
+                    tf.setText("");
                 }
                 case 'X' -> {
                     op = 2;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
+                    n = Double.parseDouble(tf.getText());
+                    tf.setText("");
                 }
                 case '/' -> {
                     op = 3;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
+                    n = Double.parseDouble(tf.getText());
+                    tf.setText("");
                 }
                 case '=', '\n' -> {
                     try {
-                        p.setText(String.valueOf(calculate()));
+                        tf.setText(String.valueOf(calculate()));
                     } catch(InvalidOperationException ex) {
                         new ErrorDialog(f, "Error", ex.getMessage());
                     }
@@ -165,22 +165,22 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
     private double calculate() {
         switch (op) {
             case 0 -> {
-                return n + Double.parseDouble(p.getText());
+                return n + Double.parseDouble(tf.getText());
             }
             case 1 -> {
-                return n - Double.parseDouble(p.getText());
+                return n - Double.parseDouble(tf.getText());
             }
             case 2 -> {
-                return n * Double.parseDouble(p.getText());
+                return n * Double.parseDouble(tf.getText());
             }
             case 3 -> {
-                if(p.getText().equals("0"))
+                if(tf.getText().equals("0"))
                     throw new InvalidOperationException("Cannot divide a number by zero.");
                 else
-                    return n / Double.parseDouble(p.getText());
+                    return n / Double.parseDouble(tf.getText());
             }
             case 4 -> {
-                return Math.pow(n, Double.parseDouble(p.getText()));
+                return Math.pow(n, Double.parseDouble(tf.getText()));
             }
             default -> {
                 return -1;
