@@ -114,33 +114,6 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
         }
     }
 
-    // Executes the appropriate operation.
-    private double calculate() {
-        switch (op) {
-            case 0 -> {
-                return n + Double.parseDouble(p.getText());
-            }
-            case 1 -> {
-                return n - Double.parseDouble(p.getText());
-            }
-            case 2 -> {
-                return n * Double.parseDouble(p.getText());
-            }
-            case 3 -> {
-                if(p.getText().equals("0"))
-                   throw new InvalidOperationException("Cannot divide a number by zero.");
-                else
-                    return n / Double.parseDouble(p.getText());
-            }
-            case 4 -> {
-                return Math.pow(n, Double.parseDouble(p.getText()));
-            }
-            default -> {
-                return -1;
-            }
-        }
-    }
-
     /**
      * Invoked when a key has been typed.
      * See the class description for {@link KeyEvent} for a definition of
@@ -185,6 +158,33 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
                 e.consume();
         } catch(NumberFormatException ex) {
             e.consume();
+        }
+    }
+
+    // Executes the appropriate operation.
+    private double calculate() {
+        switch (op) {
+            case 0 -> {
+                return n + Double.parseDouble(p.getText());
+            }
+            case 1 -> {
+                return n - Double.parseDouble(p.getText());
+            }
+            case 2 -> {
+                return n * Double.parseDouble(p.getText());
+            }
+            case 3 -> {
+                if(p.getText().equals("0"))
+                    throw new InvalidOperationException("Cannot divide a number by zero.");
+                else
+                    return n / Double.parseDouble(p.getText());
+            }
+            case 4 -> {
+                return Math.pow(n, Double.parseDouble(p.getText()));
+            }
+            default -> {
+                return -1;
+            }
         }
     }
 
