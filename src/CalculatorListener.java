@@ -35,78 +35,82 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
      * Called when a button is clicked.
      */
     public void mouseClicked(MouseEvent e) {
-        JButton b = (JButton) e.getSource();
-        if(isNumber)
-            p.setText(p.getText() + b.getText());
-        else {
-            switch (b.getText()) {
-                case "+" -> {
-                    op = 0;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
-                }
-                case "-" -> {
-                    op = 1;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
-                }
-                case "X" -> {
-                    op = 2;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
-                }
-                case ":" -> {
-                    op = 3;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
-                }
-                case "x^y" -> {
-                    op = 4;
-                    n = Double.parseDouble(p.getText());
-                    p.setText("");
-                }
-                case "+/-" -> {
-                    try {
-                        if(p.getText().charAt(p.getText().length()-1) != '-')
-                            p.setText(p.getText() + "-");
+        try {
+            JButton b = (JButton) e.getSource();
+            if(isNumber)
+                p.setText(p.getText() + b.getText());
+            else {
+                switch (b.getText()) {
+                    case "+" -> {
+                        op = 0;
+                        n = Double.parseDouble(p.getText());
+                        p.setText("");
+                    }
+                    case "-" -> {
+                        op = 1;
+                        n = Double.parseDouble(p.getText());
+                        p.setText("");
+                    }
+                    case "X" -> {
+                        op = 2;
+                        n = Double.parseDouble(p.getText());
+                        p.setText("");
+                    }
+                    case ":" -> {
+                        op = 3;
+                        n = Double.parseDouble(p.getText());
+                        p.setText("");
+                    }
+                    case "x^y" -> {
+                        op = 4;
+                        n = Double.parseDouble(p.getText());
+                        p.setText("");
+                    }
+                    case "+/-" -> {
+                        try {
+                            if(p.getText().charAt(p.getText().length()-1) != '-')
+                                p.setText(p.getText() + "-");
+                            else
+                                p.setText(p.getText().substring(0, p.getText().length()-1));
+                        } catch(StringIndexOutOfBoundsException ex) {
+                            new ErrorDialog(f, "Error", "Cannot invert sign without typing a"
+                                    + "\nnumber first.");
+                        }
+                    }
+                    case "rand" -> {
+                        Random r = new Random();
+                        p.setText(String.valueOf(r.nextDouble(1)));
+                    }
+                    case "sin" -> p.setText(String.valueOf(Math.sin(Double.parseDouble(p.getText()))));
+                    case "cos" -> p.setText(String.valueOf(Math.cos(Double.parseDouble(p.getText()))));
+                    case "tan" -> p.setText(String.valueOf(Math.tan(Double.parseDouble(p.getText()))));
+                    case "log10" -> {
+                        if(p.getText().charAt(0) == '-')
+                            new ErrorDialog(f, "Error", "Cannot calculate the logarithm of a"
+                                    + "\nnegative number.");
                         else
-                            p.setText(p.getText().substring(0, p.getText().length()-1));
-                    } catch(StringIndexOutOfBoundsException ex) {
-                        new ErrorDialog(f, "Error", "Cannot invert sign without typing a"
-                            + "\nnumber first.");
+                            p.setText(String.valueOf(Math.log10(Double.parseDouble(p.getText()))));
                     }
-                }
-                case "rand" -> {
-                    Random r = new Random();
-                    p.setText(String.valueOf(r.nextDouble(1)));
-                }
-                case "sin" -> p.setText(String.valueOf(Math.sin(Double.parseDouble(p.getText()))));
-                case "cos" -> p.setText(String.valueOf(Math.cos(Double.parseDouble(p.getText()))));
-                case "tan" -> p.setText(String.valueOf(Math.tan(Double.parseDouble(p.getText()))));
-                case "log10" -> {
-                    if(p.getText().charAt(0) == '-')
-                        new ErrorDialog(f, "Error", "Cannot calculate the logarithm of a"
-                                + "\nnegative number.");
-                    else
-                        p.setText(String.valueOf(Math.log10(Double.parseDouble(p.getText()))));
-                }
-                case "." -> p.setText(p.getText() + ".");
-                case "sqrt" -> {
-                    if(p.getText().charAt(p.getText().length()-1) == '-')
-                        new ErrorDialog(f, "Error", "Cannot calculate the square root of a"
-                                + "\nnegative number.");
-                    else
-                        p.setText(String.valueOf(Math.sqrt(Double.parseDouble(p.getText()))));
-                }
-                case "=" -> {
-                    try {
-                        p.setText(String.valueOf(calculate()));
-                    } catch(InvalidOperationException ex) {
-                        new ErrorDialog(f, "Error", ex.getMessage());
+                    case "." -> p.setText(p.getText() + ".");
+                    case "sqrt" -> {
+                        if(p.getText().charAt(p.getText().length()-1) == '-')
+                            new ErrorDialog(f, "Error", "Cannot calculate the square root of a"
+                                    + "\nnegative number.");
+                        else
+                            p.setText(String.valueOf(Math.sqrt(Double.parseDouble(p.getText()))));
                     }
+                    case "=" -> {
+                        try {
+                            p.setText(String.valueOf(calculate()));
+                        } catch(InvalidOperationException ex) {
+                            new ErrorDialog(f, "Error", ex.getMessage());
+                        }
+                    }
+                    case "CE" -> p.setText("");
                 }
-                case "CE" -> p.setText("");
             }
+        } catch(NumberFormatException ignored) {
+
         }
     }
 
@@ -146,38 +150,42 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
      */
     @Override
     public void keyTyped(KeyEvent e) {
-        char c = e.getKeyChar();
-        switch(c) {
-            case '+' -> {
-                op = 0;
-                n = Double.parseDouble(p.getText());
-                p.setText("");
-            }
-            case '-' -> {
-                op = 1;
-                n = Double.parseDouble(p.getText());
-                p.setText("");
-            }
-            case 'X' -> {
-                op = 2;
-                n = Double.parseDouble(p.getText());
-                p.setText("");
-            }
-            case '/' -> {
-                op = 3;
-                n = Double.parseDouble(p.getText());
-                p.setText("");
-            }
-            case '=', '\n' -> {
-                try {
-                    p.setText(String.valueOf(calculate()));
-                } catch(InvalidOperationException ex) {
-                    new ErrorDialog(f, "Error", ex.getMessage());
+        try {
+            char c = e.getKeyChar();
+            switch(c) {
+                case '+' -> {
+                    op = 0;
+                    n = Double.parseDouble(p.getText());
+                    p.setText("");
+                }
+                case '-' -> {
+                    op = 1;
+                    n = Double.parseDouble(p.getText());
+                    p.setText("");
+                }
+                case 'X' -> {
+                    op = 2;
+                    n = Double.parseDouble(p.getText());
+                    p.setText("");
+                }
+                case '/' -> {
+                    op = 3;
+                    n = Double.parseDouble(p.getText());
+                    p.setText("");
+                }
+                case '=', '\n' -> {
+                    try {
+                        p.setText(String.valueOf(calculate()));
+                    } catch(InvalidOperationException ex) {
+                        new ErrorDialog(f, "Error", ex.getMessage());
+                    }
                 }
             }
-        }
-        if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE))
+            if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE))
+                e.consume();
+        } catch(NumberFormatException ex) {
             e.consume();
+        }
     }
 
     /**
