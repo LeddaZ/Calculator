@@ -38,16 +38,26 @@ public class CalculatorWindow extends JFrame {
         buttonPanel.setLayout(new GridLayout(5, 4));
         add(buttonPanel, "Center");
 
-        String[] numeri = {"rand", "sqrt", "x^y", "CE", "=", "sin", "9", "8", "7", "X", "cos", "6", "5", "4", ":", "tan", "3",
+        String[] buttonLabels = {"rand", "sqrt", "x^y", "CE", "=", "sin", "9", "8", "7", "X", "cos", "6", "5", "4", ":", "tan", "3",
                 "2", "1", "-", "log10", "+/-", "0", ".", "+"};
-        for (String s : numeri) {
-            JButton b = new JButton(s);
-            if (isInt(s))
+        JButton[] buttons = new JButton[buttonLabels.length+1];
+        for(int i = 0; i < buttonLabels.length; i++) {
+            JButton b = new JButton(buttonLabels[i]);
+            if (isInt(buttonLabels[i]))
                 b.addMouseListener(new CalculatorListener(this, displayField, true));
             else
                 b.addMouseListener(new CalculatorListener(this, displayField, false));
+            buttons[i] = b;
             buttonPanel.add(b);
         }
+
+        JPanel darkModePanel = new JPanel();
+        darkModePanel.setLayout(new GridLayout());
+        JButton darkModeButton = new JButton("Dark mode");
+        darkModePanel.add(darkModeButton);
+        buttons[buttonLabels.length] = darkModeButton;
+        darkModeButton.addMouseListener(new DarkModeListener(displayField, buttons, buttonPanel, darkModeButton));
+        add(darkModePanel, "South");
 
         displayField.addKeyListener(new CalculatorListener(this, displayField, false));
         setVisible(true);
