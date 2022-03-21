@@ -109,7 +109,7 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
                     case "CE" -> tf.setText("");
                 }
             }
-        } catch(NumberFormatException ignored) {
+        } catch(NumberFormatException | StringIndexOutOfBoundsException ignored) {
 
         }
     }
@@ -158,6 +158,8 @@ public class CalculatorListener extends MouseAdapter implements KeyListener {
                 e.consume();
         } catch(NumberFormatException ex) {
             e.consume();
+        } catch(StringIndexOutOfBoundsException ignored) {
+
         }
     }
 
