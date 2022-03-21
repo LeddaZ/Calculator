@@ -1,9 +1,11 @@
+import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -25,11 +27,12 @@ public class CalculatorWindow extends JFrame {
         pDisplay.setLayout(new GridLayout());
         add(pDisplay, "North");
 
-        JLabel lDisplay = new JLabel("", SwingConstants.RIGHT);
-        lDisplay.setVerticalAlignment(SwingConstants.CENTER);
-        lDisplay.setFont(new Font("sans-serif", Font.PLAIN, 20));
-        lDisplay.setBorder(new EmptyBorder(10, 10, 10, 10));
-        pDisplay.add(lDisplay);
+        JTextField display = new JTextField("", SwingConstants.RIGHT);
+        display.setFont(new Font("sans-serif", Font.PLAIN, 20));
+        display.setBorder(new EmptyBorder(10, 10, 10, 10));
+        display.setBackground(new Color(238, 238, 238));
+        display.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        pDisplay.add(display);
 
         JPanel pNumeri = new JPanel();
         pNumeri.setLayout(new GridLayout(5, 4));
@@ -40,12 +43,13 @@ public class CalculatorWindow extends JFrame {
         for (String s : numeri) {
             JButton b = new JButton(s);
             if (isInt(s))
-                b.addMouseListener(new CalculatorListener(this, lDisplay, true));
+                b.addMouseListener(new CalculatorListener(this, display, true));
             else
-                b.addMouseListener(new CalculatorListener(this, lDisplay, false));
+                b.addMouseListener(new CalculatorListener(this, display, false));
             pNumeri.add(b);
         }
 
+        display.addKeyListener(new CalculatorListener(this, display, false));
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
